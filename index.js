@@ -42,6 +42,12 @@ async function run() {
       res.send(result);
     });
 
+    // carts
+    app.get("/carts", async (req, res) => {
+      const result = await cartCollection.find().toArray();
+      res.send(result);
+    });
+
     // cart collection
     app.post("/carts", async (req, res) => {
       const item = req.body;
