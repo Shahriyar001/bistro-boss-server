@@ -136,6 +136,31 @@ async function run() {
       res.send(result);
     });
 
+    // app.get("/menu/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: new ObjectId(id) };
+    //   const result = await menuCollection.findOne(query);
+    //   res.send(result);
+    // });
+
+    app.get("/menu/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await menuCollection.findOne(query);
+
+        if (!result) {
+          // If no document found for the provided ID
+          return res.status(404).json({ error: "Menu item not found" });
+        }
+
+        res.send(result);
+      } catch (error) {
+        console.error("Error retrieving menu item:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    });
+
     app.post("/menu", verifyToken, verifyAdmin, async (req, res) => {
       const item = req.body;
       const result = await menuCollection.insertOne(item);
